@@ -17,7 +17,9 @@ const open = defineModel<boolean>()
     </template>
 
     <template #left>
-      <AppLogo class="ml-4" />
+      <RouterLink to="/" class="ml-4">
+        <AppLogo />
+      </RouterLink>
     </template>
 
     <template #right>

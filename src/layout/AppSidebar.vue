@@ -11,7 +11,7 @@ const open = defineModel<boolean>()
     collapsible="icon"
     :ui="{ container: 'sticky top-(--ui-header-height) h-[calc(100dvh-var(--ui-header-height))]' }"
   >
-    <template #header>
+    <template #footer>
       <NewChatModal :compact="!open" @created="$router.push(`/chats/${$event}`)" />
     </template>
 

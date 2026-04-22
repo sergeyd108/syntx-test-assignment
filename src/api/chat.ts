@@ -1,4 +1,6 @@
 import { chatMessagesData } from '@/api/data/messages.ts'
+import { chatExists } from '@/api/chats.ts'
+import { delay } from '@/utils/promise.ts'
 
 export type ChatMessageData = {
   id: string
@@ -15,7 +17,11 @@ export type ChatMessageCreateData = {
 const messagesDb = new Map<string, ChatMessageData[]>()
 
 export async function fetchChatMessages(chatId: string) {
-  await new Promise((resolve) => setTimeout(resolve, 800))
+  await delay(800)
+
+  if (!(await chatExists(chatId))) {
+    throw new Error(`Chat with ID ${chatId} not found.`)
+  }
 
   if (!messagesDb.has(chatId)) {
     messagesDb.set(chatId, chatMessagesData.get(chatId) ?? [])
@@ -25,14 +31,23 @@ export async function fetchChatMessages(chatId: string) {
 }
 
 export async function createChatMessage(chatId: string, data: ChatMessageCreateData) {
-  await new Promise((resolve) => setTimeout(resolve, 500))
+  await delay(500)
 
   if (!messagesDb.has(chatId)) {
     messagesDb.set(chatId, [])
   }
 
-  const message = { ...data, id: crypto.randomUUID(), time: new Date().toLocaleTimeString() }
+  const message = { ...data, id: crypto.randomUUID(), time: getCurrentTime() }
   messagesDb.get(chatId)?.push(message)
 
   return structuredClone(message)
+}
+
+function getCurrentTime() {
+  const timeFormatter = new Intl.DateTimeFormat(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })
+  return timeFormatter.format(new Date())
 }

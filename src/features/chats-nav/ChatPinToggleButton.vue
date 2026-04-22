@@ -21,5 +21,3 @@ function pinChat() {
     @click.stop.prevent="pinChat"
   />
 </template>
-
-<style scoped></style>

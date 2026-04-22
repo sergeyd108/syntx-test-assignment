@@ -13,6 +13,16 @@ export type ChatCreateData = {
 
 let chatsDb: ChatData[] = []
 
+export async function chatExists(id: string) {
+  await delay(100)
+
+  if (!chatsDb.length) {
+    chatsDb = structuredClone(chatsData)
+  }
+
+  return chatsDb.some((chat) => chat.id === id)
+}
+
 export async function fetchChats() {
   await delay(800)
 
@@ -33,8 +43,12 @@ export async function createChat(data: ChatCreateData) {
 }
 
 export async function toggleChatPin(id: string, value: boolean) {
-  await delay(300)
+  await delay(200)
+
   const chat = chatsDb.find((chat) => chat.id === id)
-  if (chat) chat.pinned = value
+  if (!chat) return
+
+  chat.pinned = value
+
   return structuredClone(chat)
 }

@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { reactive, ref, useTemplateRef } from 'vue'
-import type { Form, FormSubmitEvent } from '@nuxt/ui'
+import type { FormSubmitEvent } from '@nuxt/ui'
 import { useChatMessages } from '@/features/chat/useChatMessages.ts'
 
 type Schema = typeof state
 
-const { sendMessage } = useChatMessages()
-const isSending = ref(false)
+const form = useTemplateRef('form')
+const textarea = useTemplateRef('textarea')
 
+const { sendMessage } = useChatMessages()
+
+const isSending = ref(false)
 const state = reactive({ content: '' })
-const form = useTemplateRef<Form<Schema>>('form')
 
 async function onSubmit({ data }: FormSubmitEvent<Schema>) {
   if (isSending.value) return
@@ -20,6 +22,7 @@ async function onSubmit({ data }: FormSubmitEvent<Schema>) {
     state.content = ''
   } finally {
     isSending.value = false
+    requestAnimationFrame(() => textarea.value?.textareaRef?.focus())
   }
 }
 
@@ -35,6 +38,7 @@ function onKeydown(event: KeyboardEvent) {
   <UForm ref="form" :state class="flex gap-4 items-center" @submit="onSubmit">
     <UFormField name="content" help="Press ctrl+enter to send" :ui="{ help: 'text-xs mt-1' }" class="flex-1">
       <UTextarea
+        ref="textarea"
         v-model="state.content"
         :rows="2"
         :maxrows="5"
