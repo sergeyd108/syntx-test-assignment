@@ -10,7 +10,7 @@ const open = ref(true)
   <div class="flex flex-col flex-1">
     <AppHeader v-model="open" />
 
-    <div class="flex flex-1 min-h-0">
+    <div class="flex flex-1">
       <AppSidebar v-model="open" />
 
       <UMain class="flex flex-col w-full">

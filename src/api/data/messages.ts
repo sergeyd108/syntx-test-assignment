@@ -1,8 +1,43 @@
 import type { ChatMessageData } from '@/api/chat.ts'
 
+const bulkSamples = [
+  'Quick update on the project.',
+  'Sure, sounds good to me.',
+  'Can you share the link when you get a chance?',
+  'No rush — tomorrow works.',
+  'Thanks, that helps a lot!',
+  'Let me check and get back to you.',
+  'Yeah, I noticed that too — odd, right?',
+  'Pushed the fix, please pull and verify.',
+  'Meeting moved to 3pm, fyi.',
+  'Coffee break? I need a break from the screen.',
+  'Honestly, I think we should ship it and iterate.',
+  'Did the deploy go through?',
+  'Still seeing the timeout on staging. Not sure if it is the migration or the cache warm-up phase.',
+  'Let me reproduce that locally and send you the stack trace.',
+  'All good from my side.',
+  'Short one.',
+  'Longer message just to vary the item heights a bit — virtual scroll needs to handle this correctly, so here we are padding it out with a few more sentences to be safe.',
+]
+
+function generateBulk(prefix: string, count: number) {
+  const senders = ['John Doe', 'You']
+  return Array.from({ length: count }, (_, i) => {
+    const h = String(8 + Math.floor(i / 60)).padStart(2, '0')
+    const m = String(i % 60).padStart(2, '0')
+    return {
+      id: `${prefix}-bulk-${i}`,
+      content: bulkSamples[i % bulkSamples.length] ?? 'Hello.',
+      sender: senders[i % senders.length] ?? 'You',
+      time: `${h}:${m}`,
+    } satisfies ChatMessageData
+  })
+}
+
 export const chatMessagesData = new Map<string, ChatMessageData[]>(
   Object.entries({
     '001': [
+      ...generateBulk('m001', 500),
       { id: 'm001-1', content: 'Hey, how are you doing?', sender: 'John Doe', time: '09:15' },
       { id: 'm001-2', content: 'Pretty good, thanks! You?', sender: 'You', time: '09:16' },
       { id: 'm001-3', content: 'All good! Are we still on for Friday?', sender: 'John Doe', time: '09:18' },

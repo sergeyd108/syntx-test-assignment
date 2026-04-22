@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { nextTick, reactive, ref, useTemplateRef } from 'vue'
+import { reactive, ref, useTemplateRef } from 'vue'
 import type { Form, FormSubmitEvent } from '@nuxt/ui'
-import { scrollToBottom } from '@/utils/dom.ts'
 import { useChatMessages } from '@/features/chat/useChatMessages.ts'
 
 type Schema = typeof state
@@ -19,8 +18,6 @@ async function onSubmit({ data }: FormSubmitEvent<Schema>) {
   try {
     await sendMessage(data.content)
     state.content = ''
-    await nextTick()
-    scrollToBottom()
   } finally {
     isSending.value = false
   }
