@@ -6,9 +6,7 @@ const injectionKey: InjectionKey<ReturnType<typeof chatMessages>> = Symbol('chat
 function chatMessages(chatId: MaybeRefOrGetter<string>) {
   const _chatId = toRef(chatId)
   const messages = shallowRef<ChatMessageData[]>([])
-
   const isLoading = ref(false)
-  const isSending = ref(false)
 
   watch(_chatId, loadChat, { immediate: true })
 
@@ -23,19 +21,13 @@ function chatMessages(chatId: MaybeRefOrGetter<string>) {
     }
   }
 
-  async function sendMessage(content: string) {
-    if (isLoading.value || isSending.value) return
-    isSending.value = true
-
-    try {
-      const message = await createChatMessage(_chatId.value, { content, sender: 'You' })
-      messages.value = [...messages.value, message]
-    } finally {
-      isSending.value = false
-    }
+  async function sendMessage(content: string, sender = 'You') {
+    if (isLoading.value) return
+    const message = await createChatMessage(_chatId.value, { content, sender })
+    messages.value = [...messages.value, message]
   }
 
-  return { chatId: _chatId, messages, isLoading, isSending, sendMessage }
+  return { chatId: _chatId, messages, isLoading, sendMessage }
 }
 
 export function provideChatMessages(chatId: MaybeRefOrGetter<string>) {

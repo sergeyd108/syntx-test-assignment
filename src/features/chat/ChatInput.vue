@@ -1,21 +1,29 @@
 <script setup lang="ts">
-import { nextTick, reactive, useTemplateRef } from 'vue'
+import { nextTick, reactive, ref, useTemplateRef } from 'vue'
 import type { Form, FormSubmitEvent } from '@nuxt/ui'
 import { scrollToBottom } from '@/utils/dom.ts'
 import { useChatMessages } from '@/features/chat/useChatMessages.ts'
 
 type Schema = typeof state
 
-const { sendMessage, isSending } = useChatMessages()
+const { sendMessage } = useChatMessages()
+const isSending = ref(false)
 
 const state = reactive({ content: '' })
 const form = useTemplateRef<Form<Schema>>('form')
 
 async function onSubmit({ data }: FormSubmitEvent<Schema>) {
-  await sendMessage(data.content)
-  state.content = ''
-  await nextTick()
-  scrollToBottom()
+  if (isSending.value) return
+  isSending.value = true
+
+  try {
+    await sendMessage(data.content)
+    state.content = ''
+    await nextTick()
+    scrollToBottom()
+  } finally {
+    isSending.value = false
+  }
 }
 
 function onKeydown(event: KeyboardEvent) {

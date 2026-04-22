@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import ChatInput from '@/features/chat/ChatInput.vue'
 import ChatMessages from '@/features/chat/ChatMessages.vue'
+import { provideBotResponse } from '@/features/chat/useBotResponse.ts'
+
+provideBotResponse()
 </script>
 
 <template>
