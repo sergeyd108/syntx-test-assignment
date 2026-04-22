@@ -11,7 +11,7 @@ function botResponse() {
 
   watch(messages, (messages, oldMessages) => {
     if (messages.length !== oldMessages.length && messages.at(-1)?.sender === 'You') {
-      respond()
+      void respond()
     }
   })
 

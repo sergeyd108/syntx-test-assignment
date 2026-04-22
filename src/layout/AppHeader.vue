@@ -17,7 +17,7 @@ const open = defineModel<boolean>()
     </template>
 
     <template #left>
-      <AppLogo />
+      <AppLogo class="ml-4" />
     </template>
 
     <template #right>

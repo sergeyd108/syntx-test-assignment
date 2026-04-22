@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import NewChatForm from '@/features/new-chat/NewChatForm.vue'
 
+defineProps<{ compact?: boolean }>()
 defineEmits<{ created: [id: string] }>()
 </script>
 
@@ -10,6 +11,6 @@ defineEmits<{ created: [id: string] }>()
       <NewChatForm @created="[$emit('created', $event), close()]" @cancel="close" />
     </template>
 
-    <UButton label="New chat" icon="i-lucide-plus" color="primary" block />
+    <UButton label="New chat" icon="i-lucide-plus" color="primary" :ui="{ label: compact && 'hidden' }" block />
   </UModal>
 </template>
