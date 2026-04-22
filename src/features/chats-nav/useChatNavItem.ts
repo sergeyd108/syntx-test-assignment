@@ -12,7 +12,7 @@ export function useChatNavItem() {
       chat,
       label: chat.name,
       icon: 'i-lucide-message-circle',
-      href: `/chats/${chat.id}`,
+      href: `/chat/${chat.id}`,
       active: chat.id === currentChatId.value,
     } satisfies NavigationMenuItem
   }

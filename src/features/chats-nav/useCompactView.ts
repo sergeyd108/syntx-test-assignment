@@ -10,6 +10,6 @@ export function provideCompactView(compact: MaybeRefOrGetter<boolean | undefined
 
 export function useCompactView() {
   const compact = inject(injectionKey)
-  if (!compact) throw new Error('useCompact must be used within a Compact provider')
+  if (!compact) throw new Error('useCompactView must be used within a CompactView provider')
   return compact
 }

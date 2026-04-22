@@ -29,6 +29,9 @@ jobs:
       - name: Typecheck
         run: pnpm run type-check
 
+      - name: Build
+        run: pnpm build
+
   deploy:
     needs: ci
     runs-on: ubuntu-latest

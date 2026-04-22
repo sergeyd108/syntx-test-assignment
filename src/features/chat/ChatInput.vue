@@ -18,7 +18,7 @@ async function onSubmit({ data }: FormSubmitEvent<Schema>) {
   isSending.value = true
 
   try {
-    await sendMessage(data.content)
+    await sendMessage(data.content.trim())
     state.content = ''
   } finally {
     isSending.value = false
@@ -53,7 +53,7 @@ function onKeydown(event: KeyboardEvent) {
       icon="i-lucide-send"
       color="primary"
       size="xl"
-      :disabled="!state.content"
+      :disabled="!state.content.trim()"
       :loading="isSending"
       class="-translate-y-1/4"
     />

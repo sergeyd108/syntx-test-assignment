@@ -12,7 +12,7 @@ const open = ref(true)
 watch(
   () => route.fullPath,
   () => {
-    if (mobileQuery?.matches) open.value = false
+    if (mobileQuery.matches) open.value = false
   },
 )
 </script>

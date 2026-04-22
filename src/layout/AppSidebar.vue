@@ -12,7 +12,7 @@ const open = defineModel<boolean>()
     :ui="{ container: 'sticky top-(--ui-header-height) h-[calc(100dvh-var(--ui-header-height))]' }"
   >
     <template #footer>
-      <NewChatModal :compact="!open" @created="$router.push(`/chats/${$event}`)" />
+      <NewChatModal :compact="!open" @created="$router.push(`/chat/${$event}`)" />
     </template>
 
     <ChatListNavTabs :compact="!open" />

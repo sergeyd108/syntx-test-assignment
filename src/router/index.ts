@@ -8,7 +8,7 @@ const router = createRouter({
       component: () => import('@/pages/IndexPage.vue'),
     },
     {
-      path: '/chats/:chatId',
+      path: '/chat/:chatId',
       component: () => import('@/pages/ChatPage.vue'),
       props: true,
     },

@@ -12,7 +12,7 @@ const { isResponding } = useBotResponse()
 
 watch(messages, scrollToBottom, { flush: 'post' })
 
-async function onResize() {
+function onResize() {
   // first call is 'dirty' scroll to bottom
   // second call in RAF is needed, because scroll height has been recalculated
   scrollToBottom()

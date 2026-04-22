@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
   <div class="inline-flex gap-1.5 px-1 align-middle py-4">
     <span v-for="i in 3" :key="i" class="dot size-1.25 rounded-full bg-current" />
