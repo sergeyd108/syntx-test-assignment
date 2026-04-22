@@ -12,7 +12,7 @@ import NewChatModal from '@/features/new-chat/NewChatModal.vue'
         <p class="text-muted">Pick a chat from the sidebar to jump back in, or start a new conversation below.</p>
       </div>
 
-      <NewChatModal>
+      <NewChatModal @created="$router.push(`/chats/${$event}`)">
         <UButton label="Start a new chat" icon="i-lucide-plus" color="primary" size="xl" />
       </NewChatModal>
     </div>
