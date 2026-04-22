@@ -1,25 +1,16 @@
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
-import { onBeforeRouteUpdate } from 'vue-router'
-import { useCurrentChatStore } from '@/stores/current-chat.ts'
+import { watch } from 'vue'
 import ChatBox from '@/features/chat/ChatBox.vue'
 import ChatSkeleton from '@/features/chat/ChatSkeleton.vue'
 import { scrollToBottom } from '@/utils/dom.ts'
+import { provideChatMessages } from '@/features/chat/useChatMessages.ts'
 
 const { chatId } = defineProps<{ chatId: string }>()
 
-const currentChatStore = useCurrentChatStore()
-
-onMounted(() => {
-  currentChatStore.loadChat(chatId)
-})
-
-onBeforeRouteUpdate(() => {
-  currentChatStore.loadChat(chatId)
-})
+const { isLoading } = provideChatMessages(() => chatId)
 
 watch(
-  () => currentChatStore.isLoading,
+  isLoading,
   (isLoading) => {
     if (!isLoading) scrollToBottom()
   },
@@ -29,7 +20,7 @@ watch(
 
 <template>
   <div class="p-4 flex-1 flex flex-col">
-    <ChatSkeleton v-if="currentChatStore.isLoading" />
+    <ChatSkeleton v-if="isLoading" />
     <ChatBox v-else class="flex-1" />
   </div>
 </template>

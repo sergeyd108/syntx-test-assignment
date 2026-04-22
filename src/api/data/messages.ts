@@ -1,6 +1,6 @@
-import type { ChatMessageDto } from '@/stores/current-chat.ts'
+import type { ChatMessageData } from '@/api/chat.ts'
 
-export const chatMessagesData = new Map<string, ChatMessageDto[]>(
+export const chatMessagesData = new Map<string, ChatMessageData[]>(
   Object.entries({
     '001': [
       { id: 'm001-1', content: 'Hey, how are you doing?', sender: 'John Doe', time: '09:15' },

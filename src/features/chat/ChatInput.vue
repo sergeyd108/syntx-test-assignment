@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { nextTick, reactive, useTemplateRef } from 'vue'
 import type { Form, FormSubmitEvent } from '@nuxt/ui'
-import { useCurrentChatStore } from '@/stores/current-chat.ts'
 import { scrollToBottom } from '@/utils/dom.ts'
+import { useChatMessages } from '@/features/chat/useChatMessages.ts'
 
 type Schema = typeof state
 
-const currentChatStore = useCurrentChatStore()
+const { sendMessage, isSending } = useChatMessages()
 
 const state = reactive({ content: '' })
 const form = useTemplateRef<Form<Schema>>('form')
 
-async function sendMessage({ data }: FormSubmitEvent<Schema>) {
-  await currentChatStore.sendMessage(data.content)
+async function onSubmit({ data }: FormSubmitEvent<Schema>) {
+  await sendMessage(data.content)
   state.content = ''
   await nextTick()
   scrollToBottom()
@@ -27,7 +27,7 @@ function onKeydown(event: KeyboardEvent) {
 </script>
 
 <template>
-  <UForm ref="form" :state class="flex gap-4 items-center" @submit="sendMessage">
+  <UForm ref="form" :state class="flex gap-4 items-center" @submit="onSubmit">
     <UFormField name="content" help="Press ctrl+enter to send" :ui="{ help: 'text-xs mt-1' }" class="flex-1">
       <UTextarea
         v-model="state.content"
@@ -45,7 +45,7 @@ function onKeydown(event: KeyboardEvent) {
       color="primary"
       size="xl"
       :disabled="!state.content"
-      :loading="currentChatStore.isSending"
+      :loading="isSending"
       class="-translate-y-1/4"
     />
   </UForm>

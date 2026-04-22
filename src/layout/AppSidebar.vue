@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import type { NavigationMenuItem } from '@nuxt/ui'
 import { useChatsStore } from '@/stores/chats.ts'
-import { useRoute } from 'vue-router'
+import NewChatModal from '../features/new-chat/NewChatModal.vue'
 
 const open = defineModel<boolean>()
 
@@ -31,6 +32,10 @@ const items = computed(() => {
     collapsible="icon"
     :ui="{ container: 'sticky top-(--ui-header-height) h-[calc(100dvh-var(--ui-header-height))]' }"
   >
+    <template #header>
+      <NewChatModal @created="$router.push(`/chats/${$event}`)" />
+    </template>
+
     <UNavigationMenu :items orientation="vertical" :ui="{ link: 'p-1.5 overflow-hidden' }" />
   </USidebar>
 </template>
