@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { watch } from 'vue'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-import { useChatMessages } from '@/features/chat/useChatMessages.ts'
 import { useBotResponse } from '@/features/chat/useBotResponse.ts'
 import { scrollToBottom } from '@/utils/dom.ts'
 import ChatMessage from '@/features/chat/ChatMessage.vue'
 import BotRespondingIndicator from '@/features/chat/BotRespondingIndicator.vue'
+import { useCurrentChatStore } from '@/stores/current-chat.ts'
 
-const { messages } = useChatMessages()
+const currentChatStore = useCurrentChatStore()
 const { isResponding } = useBotResponse()
 
-watch(messages, scrollToBottom, { flush: 'post' })
+watch(() => currentChatStore.messages, scrollToBottom, { flush: 'post' })
 
 function onResize() {
   // first call is 'dirty' scroll to bottom
@@ -21,7 +21,14 @@ function onResize() {
 </script>
 
 <template>
-  <DynamicScroller :items="messages" :min-item-size="72" key-field="id" class="py-4" page-mode @resize.once="onResize">
+  <DynamicScroller
+    :items="currentChatStore.messages"
+    :min-item-size="72"
+    key-field="id"
+    class="py-4"
+    page-mode
+    @resize.once="onResize"
+  >
     <template #default="{ item, active, index }">
       <DynamicScrollerItem
         :item="item"

@@ -1,19 +1,22 @@
 import { inject, type InjectionKey, provide, ref, watch } from 'vue'
-import { useChatMessages } from '@/features/chat/useChatMessages.ts'
 import { delay } from '@/utils/promise.ts'
 import { generateMessageText } from '@/utils/text-gen.ts'
+import { useCurrentChatStore } from '@/stores/current-chat.ts'
 
 const injectionKey: InjectionKey<ReturnType<typeof botResponse>> = Symbol('bot-response')
 
 function botResponse() {
-  const { messages, sendMessage } = useChatMessages()
+  const currentChatStore = useCurrentChatStore()
   const isResponding = ref(false)
 
-  watch(messages, (messages, oldMessages) => {
-    if (messages.length !== oldMessages.length && messages.at(-1)?.sender === 'You') {
-      void respond()
-    }
-  })
+  watch(
+    () => currentChatStore.messages,
+    (messages, oldMessages) => {
+      if (messages.length !== oldMessages.length && messages.at(-1)?.sender === 'You') {
+        void respond()
+      }
+    },
+  )
 
   async function respond() {
     if (isResponding.value) return
@@ -22,7 +25,7 @@ function botResponse() {
     try {
       await delay(1000)
       const content = generateMessageText()
-      await sendMessage(content, 'Chat Bot')
+      await currentChatStore.sendMessage(content, 'Chat Bot')
     } finally {
       isResponding.value = false
     }
