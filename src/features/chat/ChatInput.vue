@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { reactive, ref, useTemplateRef } from 'vue'
 import type { FormSubmitEvent } from '@nuxt/ui'
-import { useChatMessages } from '@/features/chat/useChatMessages.ts'
+import { useCurrentChatStore } from '@/stores/current-chat.ts'
+import { useBotResponse } from '@/features/chat/useBotResponse.ts'
 
 type Schema = typeof state
 
 const form = useTemplateRef('form')
 const textarea = useTemplateRef('textarea')
 
-const { sendMessage } = useChatMessages()
+const { sendMessage } = useCurrentChatStore()
+const { respond } = useBotResponse()
 
 const isSending = ref(false)
 const state = reactive({ content: '' })
@@ -20,6 +22,7 @@ async function onSubmit({ data }: FormSubmitEvent<Schema>) {
   try {
     await sendMessage(data.content.trim())
     state.content = ''
+    void respond()
   } finally {
     isSending.value = false
     requestAnimationFrame(() => textarea.value?.textareaRef?.focus())

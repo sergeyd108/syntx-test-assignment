@@ -1,11 +1,9 @@
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
 import type { NavigationMenuItem } from '@nuxt/ui'
 import type { ChatData } from '@/api/chats.ts'
+import { useCurrentChatStore } from '@/stores/current-chat.ts'
 
 export function useChatNavItem() {
-  const route = useRoute()
-  const currentChatId = computed(() => route.params.chatId as string)
+  const currentChatStore = useCurrentChatStore()
 
   function toChatItem(chat: ChatData) {
     return {
@@ -13,9 +11,9 @@ export function useChatNavItem() {
       label: chat.name,
       icon: 'i-lucide-message-circle',
       href: `/chat/${chat.id}`,
-      active: chat.id === currentChatId.value,
+      active: chat.id === currentChatStore.chatId,
     } satisfies NavigationMenuItem
   }
 
-  return { currentChatId, toChatItem }
+  return { toChatItem }
 }
